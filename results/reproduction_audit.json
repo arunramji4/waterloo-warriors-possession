@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "full_preprocessing_reproduction_byte_identical": true,
+  "submission_sha256": "8130c7b38d0fe2b4ee0c2f43d9445595867ae5d2db4260160793d7531911f8e2",
+  "frames": 199319,
+  "public_interval_has_predictions": true,
+  "merge_verified_every_frame": true,
+  "official_format_validator": "passed",
+  "player_order_invariance": "passed for both checkpoints",
+  "observation_features_outside_public_match_frozen_cache": true,
+  "no_pseudo_labels_read_by_submission": true,
+  "team_name_pending": true,
+  "github_publication_pending": true
+}

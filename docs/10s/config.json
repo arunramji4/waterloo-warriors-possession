@@ -1,0 +1,169 @@
+{
+  "dataset": "DFL + SkillCorner detected-only + Metrica",
+  "splits": {
+    "train": {
+      "dfl": [
+        "DFL-MAT-J03WOY",
+        "DFL-MAT-J03WOH",
+        "DFL-MAT-J03WR9",
+        "DFL-MAT-J03WPY",
+        "DFL-MAT-J03WN1"
+      ],
+      "skillcorner": [
+        "SK-2011166",
+        "SK-1996436",
+        "SK-2010085",
+        "SK-1986691",
+        "SK-2007448",
+        "SK-2006229",
+        "SK-1959846",
+        "SK-2017461",
+        "SK-1925299",
+        "SK-1874553",
+        "SK-2013725",
+        "SK-1953632",
+        "SK-2006363",
+        "SK-2016236",
+        "SK-1899585",
+        "SK-1927964"
+      ],
+      "metrica": [
+        "METRICA-1",
+        "METRICA-2",
+        "METRICA-3"
+      ]
+    },
+    "validation": {
+      "dfl": [
+        "DFL-MAT-J03WQQ"
+      ],
+      "skillcorner": [
+        "SK-2015213",
+        "SK-1886347"
+      ],
+      "metrica": []
+    },
+    "test": {
+      "dfl": [
+        "DFL-MAT-J03WMX"
+      ],
+      "skillcorner": [
+        "SK-2007721",
+        "SK-1996435"
+      ],
+      "metrica": []
+    }
+  },
+  "seed": 42,
+  "initialization": "random",
+  "context_seconds_each_side": 10,
+  "tokens": 101,
+  "input_hz": 5,
+  "output_hz": 4,
+  "source_fps": 25,
+  "architecture": "same 64-dimensional, four-head, two-layer transformer with team mean/max player encoder",
+  "feature_order": "same 10 player + 10 scene features as train_possession.py",
+  "skillcorner_tracking": "is_detected is True and finite x/y only; no inferred positions, interpolation, forward filling or extrapolation",
+  "skillcorner_labels": "Provider in-play phases supply H/A; phase complement within official match periods supplies D. Unknown owner/conflicting phase overlap ignored. Labels are provider-generated, not hand GT.",
+  "dfl_labels": "BallStatus0=D; status1 with possession1/2=H/A; else ignored",
+  "labels_in_features": false,
+  "augmentation": {
+    "player_dropout": false,
+    "camera_masking": false,
+    "reflections": false,
+    "team_swap": false,
+    "skillcorner_synthetic_changes": "Live keeper-control ball masking only; detected-only coordinates retained; no fills",
+    "live_keeper_ball_masking": {
+      "sources": [
+        "dfl",
+        "skillcorner",
+        "metrica"
+      ],
+      "minimum_observed_fraction": 0.75,
+      "form": "Contiguous gaps in candidate-control runs; labels unchanged; existing gaps never filled",
+      "candidates": "Same-team live GK within2m in penalty area, relative speed<=2.5m/s, sustained>=1s; SK supplied GK possession also accepted"
+    },
+    "dfl_ball_masking": {
+      "dead_run_probability": 0,
+      "dead_fraction_range": [
+        0,
+        0
+      ],
+      "live_run_probability": 0.15,
+      "live_fraction_range": [
+        0.2,
+        0.6
+      ],
+      "coherence": "Contiguous gaps within existing live/dead runs; clear positions, velocities, visibility, source and ball-relative features; recompute missing age"
+    },
+    "dfl_dead_ball_masking": {
+      "sources": [
+        "dfl"
+      ],
+      "run_probability": 1.0,
+      "observed_fraction": 0.9,
+      "placement": "Empirical gap/burst templates; no intact-case bypass; ceiling rounding",
+      "fully_missing_window_rate": 0.05803921568627451,
+      "fully_missing_windows_require_all_dead": true,
+      "profile_sha256": "73014f2ba64427bcb64a3b85adb6799147a55b4f4be322695f54fbaac8a3ae56",
+      "skillcorner_and_metrica": "Natural ball observations unchanged except original live goalkeeper masking"
+    }
+  },
+  "validation_augmentation": false,
+  "test_augmentation": false,
+  "selection": "Equal mean of DFL and SkillCorner validation spellF1; equal mean macroF1 tie-break. Whole matches held out.",
+  "scorer_sha256": "341bad48904b489d6e875397b27687f5d6a4d22a397f3dc8af3a00d48f16874d",
+  "barcelona_data_used": false,
+  "barcelona_gt_used": false,
+  "broadcast_source_flag": 0,
+  "barcelona_data_scope": "None: no Barca clips, context, features or labels enter training.",
+  "metrica_labels": "All three matches; full-half event-derived candidate H/A/D; no nearest-player ownership; not supplied frame-level GT.",
+  "train_samples_by_source": {
+    "dfl": 113482,
+    "skillcorner": 376660,
+    "metrica": 68032
+  },
+  "sample_counts": {
+    "train": 558174,
+    "validation": 70352,
+    "test": 69412
+  },
+  "train_class_counts": [
+    158363,
+    145158,
+    254653
+  ],
+  "class_weights": [
+    1.058915522249791,
+    1.1060319860199865,
+    0.8350524917302219
+  ],
+  "epochs": 100,
+  "min_epochs": 20,
+  "patience": 12,
+  "scheduler": "ReduceLROnPlateau spellF1, factor0.5, patience3, minimum1e-6",
+  "lr": 0.0005,
+  "weight_decay": 0.01,
+  "batch_size": 128,
+  "threads": 4,
+  "device": "cuda",
+  "code_sha256": {
+    "training/train_external10s.py": "870e06391c26316dc886c003cacadcc44249e9641b354e1dd5ec41c80ca216e1",
+    "training/metrica_data.py": "bcc208d3c3423427b37eb2235216796c6ee6f00ee24bfa90809adf4b0fb90ce1",
+    "training/keeper_ball_dropout.py": "447000d521b92e7f7c64c960ba4d01c736f6f8442bac35c3eaca5859d4dd2361",
+    "scripts/build_metrica_event_labels.py": "ed8779985219e0f237fdb59e8ec5f3cd9530d9661b8dcc0624f26c0b0f154f2f",
+    "training/skillcorner_data.py": "cbabedd13b4612d14547901ac786045ba259a94d703e2b090fddc60c44c93d28",
+    "training/dead_ball_dropout.py": "5517f02de064e4eac20bc2018a71448cb23855b3082fa8e72b90c192bc0b9bce",
+    "training/dfl_data.py": "5f080477b57a63cc794cd3fafdd539fdea413126fa3aafe7ba0fd1efca6ccf37",
+    "training/train_possession.py": "fef2ed456316f2971d69f5e599bdd6c382e3598ad2bdef98844017231e9b4ed8",
+    "training/experiment_models.py": "749b05dd8550485dd4f037004e91cc95a595c7dde67f50602be9aecfb62cd049",
+    "training/full_attention.py": "eb749cd529459b867e8465725e9df0f327c17010675f3f03e2f41639cd54a427",
+    "training/team_attention.py": "7dacdbb6abe408efb70b199520b3795e18497a2f467dd973a284f92c2746a923",
+    "training/visibility_dropout.py": "39bbb817a2b2025d03eeacfa296e40adec4564a054bcfa3f220802d2fef51300"
+  },
+  "model_type": "pooled",
+  "gradient_accumulation": 1,
+  "effective_batch_size": 128,
+  "barcelona_observation_profile_used": true,
+  "barcelona_supervised_training_examples": false
+}
