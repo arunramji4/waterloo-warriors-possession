@@ -131,7 +131,7 @@ The accompanying repository provides frozen inference checkpoints, pinned depend
 python reproduce.py --output outputs/submission.csv
 ```
 
-This aligns feeds from player geometry, retains geometry-accepted broadcast ball sightings including those outside the pitch, builds observation-only features, runs both frozen models on the complete halves, smooths each separately, applies the dead override, and validates the resulting 199,319-row CSV. Match tracking, videos, feature caches, and reconstructed tracking exports are excluded from the public repository. A manifest records checkpoint and final-file hashes. Training configs, source splits, and completed histories accompany the weights; external dataset URLs and checksums are documented separately.
+This aligns feeds from player geometry, retains geometry-accepted broadcast ball sightings including those outside the pitch, builds observation-only features, runs both frozen models on the complete halves, smooths each separately, applies the dead override, and validates the resulting 199,319-row CSV. Match tracking, videos, feature caches, and reconstructed tracking exports are excluded from the public repository. A manifest records checkpoint and final-file hashes. The repository contains the inference code and frozen weights needed to regenerate the file. The external training sources and label construction are described in Sections 4 and 5.
 
 The two submitted models contain no Barcelona pseudo-label training examples or checkpoint-selection targets. Automatic Barcelona visibility statistics did inform the DFL masking policy, and algorithmic Barcelona pseudo-labels informed diagnostic comparisons. Metrica event-derived supervision remains part of training and has approximate transition timing.
 
