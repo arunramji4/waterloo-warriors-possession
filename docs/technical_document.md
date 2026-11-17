@@ -1,7 +1,8 @@
 # Learning Football Possession When the Ball Disappears
 
 **Submission technical document · 17 November 2026**  
-**Team and authors:** Pending team details
+**Team:** Waterloo Warriors  
+**Authors:** Arun Ramji, Sam Zamir, Ethan Batiuk
 
 ## 1 Why a Transformer
 

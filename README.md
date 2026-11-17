@@ -1,4 +1,6 @@
-# Football possession submission
+# Waterloo Warriors football possession submission
+
+**Authors:** Arun Ramji, Sam Zamir, Ethan Batiuk
 
 Run the frozen ±5s and ±10s temporal Transformers, smooth each independently at 2 seconds, then predict **dead if either says dead; otherwise retain the 5s label**. There is no smoothing after the merge.
 
