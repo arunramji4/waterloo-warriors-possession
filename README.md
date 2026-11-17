@@ -55,7 +55,7 @@ The shared player encoder feeds masked mean/max pooling for each team, followed 
 | Original ±10s | 0.5544 | 0.5356 |
 | Combined dead override | Not measured | 0.5865 |
 
-These are separate evaluations. Pseudo-label agreement is not verified accuracy. The ensemble was chosen to favour extra stoppage calls, not because it beat 5s alone in this diagnostic. Full-half submission predictions are regenerated separately from diagnostic files, which excluded the public interval. Checkpoint selection never used the Barcelona comparisons.
+These are separate evaluations. Pseudo-label agreement is not verified accuracy. Pseudo-labels were created because we needed a common target-game reference for comparing architectures. The 2s smoothing threshold was an intuitive choice to reduce jitter. The ensemble reflects our hypothesis that longer context can recognise stoppages the shorter window misses, not a demonstrated improvement over 5s alone in this diagnostic. Full-half submission predictions are regenerated separately from diagnostic files, which excluded the public interval. Checkpoint selection never used the Barcelona comparisons.
 
 Training records for the two submitted models are in `docs/5s/` and `docs/10s/`. The supplied weights are sufficient to reproduce predictions; retraining from random initialization is not required. External data sources and labels are described in [training data](docs/training_data.md). The technical document explains why ball masking differs between sources and why the goalkeeper rule remains common to all three.
 
